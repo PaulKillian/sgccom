@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { StreamChat } from 'stream-chat';
 import { Chat, enTranslations, Streami18n } from 'stream-chat-react';
+import SignIn from './components/SignIn/SignIn.js';
+import Calendar from './components/Calendar';
+import Form from './components/Form.js'
+import { eventFormData, signFormData }from './assets/FormData.js'
 
 import 'stream-chat-react/dist/css/index.css';
 import './App.css';
@@ -83,6 +87,9 @@ const App = () => {
           />
         </Chat>
       </div>
+      <Calendar />
+      <Form formData={signFormData} />
+      <Form formData={eventFormData} />
     </>
   );
 };
