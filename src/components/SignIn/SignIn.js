@@ -1,74 +1,102 @@
-import React, {useState} from 'react';
-import './SignIn.css'
+import { createClient } from '@supabase/supabase-js'
+import { Auth } from '@supabase/auth-ui-react'
+import { useState, useEffect } from 'react'
+
+const supabase = createClient(
+  'https://oodbxjicokcxmmclwojn.supabase.co', 
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9vZGJ4amljb2tjeG1tY2x3b2puIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODU2NDQ3ODEsImV4cCI6MjAwMTIyMDc4MX0.RJHxPMDTBwx16ZElgEiOGNesdJac6340SKI5KAtih0k'
+)
+
+const customTheme = {
+  default: {
+    colors: {
+      brand: 'hsl(153 60.0% 53.0%)',
+      brandAccent: 'hsl(154 54.8% 45.1%)',
+      brandButtonText: 'white',
+      // ..
+    },
+  },
+  dark: {
+    colors: {
+      brandButtonText: 'white',
+      defaultButtonBackground: '#2e2e2e',
+      defaultButtonBackgroundHover: '#3e3e3e',
+      //..
+    },
+  },
+  // You can also add more theme variations with different names.
+  evenDarker: {
+    colors: {
+      brandButtonText: 'white',
+      defaultButtonBackground: '#1e1e1e',
+      defaultButtonBackgroundHover: '#2e2e2e',
+      //..
+    },
+  },
+}
 
 const SignIn = () => {
-// const { data, error } = await supabase.auth.signUp(
-//   {
-//     email: 'example@email.com',
-//     password: 'example-password',
-//     options: {
-//       data: {
-//         first_name: 'John',
-//         age: 27,
-//       }
-//     }
-//   }
-// )
+  const [session, setSession] = useState(null)
 
-const [firstName, setFirstName] = useState('');
-const [email, setEmail] = useState('');
-const [password, setPassword] = useState('');
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session)
+    })
+    
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session)
+    })
 
-const handleFirstNameChange = (e) => {
-  setFirstName(e.target.value);
-};
+    // (async function getUser() {
+    //   const {
+    //     data: { session },
+    //   } = await supabaseClient.auth.getSession()
+    //   console.log(data)
+    // })()
 
-const handleEmailChange = (e) => {
-  setEmail(e.target.value);
-};
+    return () => subscription.unsubscribe()
+  }, [])
 
-const handlePasswordChange = (e) => {
-  setPassword(e.target.value);
-};
+  const getUserId = async () => {
+    let { data: profiles, error } = await supabase
+    .from('profiles')
+    .select('id')
+    return profiles
+  }
 
-const handleSubmit = (e) => {
-  e.preventDefault();
-  // Handle form submission logic here (e.g., API calls)
-  console.log('First Name:', firstName);
-  console.log('Email:', email);
-  console.log('Password:', password);
-};
+  const insertUserId = async () => {
+    const { data, error } = await supabase
+      .from('profiles')
+      .insert([
+        { id: session.user.id },
+    ])
+  }
 
-  return (
-    <><div className="flex flex-center">
-      <div className='sign-image'></div>
-      <div className='sign-color'></div>
-    </div>
-    <div className="container mt-5">
-        <div className="row">
-          <div className="col-md-6 offset-md-3">
-            <h2>Sign Up / Sign In</h2>
-            <form onSubmit={handleSubmit}>
-              <div className="mb-3">
-                <label htmlFor="firstName" className="form-label">First Name</label>
-                <input type="text" className="form-control" id="firstName" value={firstName} onChange={handleFirstNameChange} required />
-              </div>
-              <div className="mb-3">
-                <label htmlFor="email" className="form-label">Email address</label>
-                <input type="email" className="form-control" id="email" value={email} onChange={handleEmailChange} required />
-              </div>
-              <div className="mb-3">
-                <label htmlFor="password" className="form-label">Password</label>
-                <input type="password" className="form-control" id="password" value={password} onChange={handlePasswordChange} required />
-              </div>
-              <button type="submit" className="btn btn-primary mr-2">Sign Up</button>
-              <button type="submit" className="btn btn-secondary">Sign In</button>
-            </form>
-          </div>
-        </div>
-      </div>
-      </>
-  )
+  if(session) {
+    (async function get() {
+      const profiles = await getUserId()
+      console.log(profiles)
+      if (profiles.length === 0) {
+        insertUserId()
+      } else {
+        return
+      }
+    })()
+  }
+
+  if(!session) {
+    return (
+      <Auth
+        supabaseClient={supabase}
+        theme="default" // can also be "dark" or "evenDarker"
+        appearance={{ theme: customTheme }}
+      />
+    )
+  } else {
+    return null
+  }
 }
 
 export default SignIn
