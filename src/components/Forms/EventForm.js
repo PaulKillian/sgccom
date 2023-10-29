@@ -28,15 +28,13 @@ export const eventFormData = [
   },
 ]
 
-export const handleSubmit = async (eventSubmission, getUserId, eventId) => {
+export const handleSubmit = async (eventSubmission, eventId) => {
   const {summary, location, description, start, end } = eventSubmission 
   
-  const uuid = await getUserId()
   const { data, error } = await supabase
     .from('eventCheck')
     .insert({ 
-      id: eventId, 
-      uuid: uuid[0].id,
+      id: eventId,
       summary,
       location,
       description,
@@ -46,12 +44,11 @@ export const handleSubmit = async (eventSubmission, getUserId, eventId) => {
     .select()
 }   
 
-const EventForm = ({getUserId}) => {
+const EventForm = () => {
   return (
     <Form 
       formData={eventFormData}
       handleSubmit={handleSubmit}
-      getUserId={getUserId}
     />
   )
 }

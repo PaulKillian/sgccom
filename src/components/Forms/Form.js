@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { eventData } from '../AdminEventCheck'
 
-  const Form = ({formData, handleSubmit, getUserId}) => {
+  const Form = ({formData, handleSubmit}) => {
     const formElements = {};
     const [state, setState] = useState('');
 
@@ -42,7 +42,6 @@ import { eventData } from '../AdminEventCheck'
                     {data.type === 'button' &&
                       <button onClick={() => {handleSubmit(
                         state, 
-                        getUserId, 
                         eventId
                       )}} 
                         key={index}

@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 import { Auth } from '@supabase/auth-ui-react'
 import { useState, useEffect } from 'react'
+import MainChat from '../MainChat/MainChat'
 
 const supabase = createClient(
   'https://oodbxjicokcxmmclwojn.supabase.co', 
@@ -88,14 +89,18 @@ const SignIn = () => {
 
   if(!session) {
     return (
-      <Auth
-        supabaseClient={supabase}
-        theme="default" // can also be "dark" or "evenDarker"
-        appearance={{ theme: customTheme }}
-      />
+      <div class="container w-50">
+        <Auth
+          supabaseClient={supabase}
+          theme="default" // can also be "dark" or "evenDarker"
+          appearance={{ theme: customTheme }}
+        />
+      </div>
     )
   } else {
-    return null
+    return (
+      <MainChat />
+    )
   }
 }
 

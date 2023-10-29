@@ -4,7 +4,7 @@ import { supabase } from '../SupaBase'
 import ApiCalendar from 'react-google-calendar-api';
 import Calendar from '../Calendar/Calendar';
 
-const EventCheck = ({apiCalendar, getUserId}) => {
+const EventCheck = ({apiCalendar}) => {
   const [events, setEvents] = useState([])
   const [error, setError] = useState(null)
 
@@ -55,20 +55,21 @@ const EventCheck = ({apiCalendar, getUserId}) => {
           console.log(error);
         });
 
+      console.log(eventInfo.id)
+
       const { error } = await supabase
       .from('eventCheck')
       .delete()
       .filter('id', 'eq', eventInfo.id)
-      .filter('uuid', 'eq', eventInfo.uuid)
       .select()
     } else {
       const { error } = await supabase
       .from('eventCheck')
       .delete()
       .filter('id', 'eq', eventInfo.id)
-      .filter('uuid', 'eq', eventInfo.uuid)
       .select()
     }  
+    setEvents([])
   }
   
     // const list = await apiCalendar.listUpcomingEvents(10).then(({ result }) => {

@@ -7,20 +7,20 @@ import { ChannelSearch } from '../ChannelSearch/ChannelSearch';
 import { TeamChannelList } from '../TeamChannelList/TeamChannelList';
 import { TeamChannelPreview } from '../TeamChannelPreview/TeamChannelPreview';
 
-import { CalendarIcon } from '../../assets';
+import { SideBarFlag, SideBarLogo } from '../../assets';
 
 const SideBar = () => (
   <div className='channel-list__sidebar'>
     {/* <div className='channel-list__sidebar__icon1'>
       <div className='icon1__inner'>
-        <CalendarIcon />
-      </div>
-    </div> */}
-    <div className='channel-list__sidebar__icon2'>
-      <div className='icon2__inner'>
-        <CalendarIcon />
+        <SideBarLogo />
       </div>
     </div>
+    <div className='channel-list__sidebar__icon2'>
+      <div className='icon2__inner'>
+        <SideBarFlag />
+      </div>
+    </div> */}
   </div>
 );
 
