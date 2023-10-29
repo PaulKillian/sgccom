@@ -34,7 +34,7 @@ const EventCheck = ({apiCalendar, getUserId}) => {
     if(event.target.id === 'approve') {
       const event = {
         summary: eventInfo.summary,
-        location: eventInfo.summary,
+        location: eventInfo.location,
         description: eventInfo.description,
         start: {
           dateTime: eventInfo.start,
@@ -56,19 +56,18 @@ const EventCheck = ({apiCalendar, getUserId}) => {
         });
 
       const { error } = await supabase
-        .from('eventCheck')
-        .delete()
-        .filter('id', 'eq', eventInfo.id)
-        .filter('uuid', 'eq', eventInfo.uuid)
-        .select()
+      .from('eventCheck')
+      .delete()
+      .filter('id', 'eq', eventInfo.id)
+      .filter('uuid', 'eq', eventInfo.uuid)
+      .select()
     } else {
       const { error } = await supabase
-        .from('eventCheck')
-        .delete()
-        .filter('id', 'eq', eventInfo.id)
-        .filter('uuid', 'eq', eventInfo.uuid)
-        .select()
-      console.log(event.target.id, eventInfo.id)
+      .from('eventCheck')
+      .delete()
+      .filter('id', 'eq', eventInfo.id)
+      .filter('uuid', 'eq', eventInfo.uuid)
+      .select()
     }  
   }
   
@@ -76,7 +75,6 @@ const EventCheck = ({apiCalendar, getUserId}) => {
     //   console.log('ressss', result.items);
     // })
     // console.log(list)
-
   return (
     <div>
       {(events.length === 0)
@@ -97,6 +95,7 @@ const EventCheck = ({apiCalendar, getUserId}) => {
                   <h5 className="card-title">Event</h5>
                   <h6 className="card-subtitle mb-2 text-muted">{eventInfo.summary}</h6>
                   <p className="card-text">{eventInfo.description}</p>
+                  <p className="card-text">{eventInfo.location}</p>
                   <p className="card-text">{eventInfo.start}</p>
                   <p className="card-text">{eventInfo.end}</p>
                   <button 
