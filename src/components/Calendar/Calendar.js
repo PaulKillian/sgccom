@@ -1,50 +1,22 @@
-import React from 'react';
-import ApiCalendar from 'react-google-calendar-api';
-import { useState } from 'react'
-import { config } from "./GoogleConfig";
-import EventCheck from '../EventCheck/EventCheck';
+const Calendar = () => (
+  <div className='d-flex justify-content-around'>
+    <iframe src='https://calendar.google.com/calendar/embed?src=psk65lava%40gmail.com&ctz=America%2FLos_Angeles'
+    title='Event Calendar' 
+    style={{
+      position: 'relative', 
+      top:'0',
+      left:'0',
+      bottom:'0', 
+      right:'0',
+      width:'70%', 
+      height:'70vh',
+      border:'none', 
+      margin:'0',
+      padding:'0',
+      overflow:'hidden' 
+    }} />
+  </div>
+)
 
-const apiCalendar = new ApiCalendar(config);
-
-const CalendarLogin = ({getUserId}) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
-  const [user, setUser] = useState(apiCalendar)
-
-  const handleItemClick = async (e, name) => {
-    if (name === 'sign-in') {
-      const newToken = await apiCalendar.handleAuthClick()
-      setIsLoggedIn(true)
-    } else if (name === 'sign-out') {
-      apiCalendar.handleSignoutClick();
-      setIsLoggedIn(false)
-    }
-  }
-
-  // isLoggedIn && 
-  //   apiCalendar.listUpcomingEvents(10).then(({ result }) => {
-  //     console.log(result.items);
-  //   })
+export default Calendar
   
-    return (
-      <>
-      {!isLoggedIn &&
-        <button
-          onClick={(e) => handleItemClick(e, 'sign-in')}
-        > sign-in
-        </button>
-      }
-      {isLoggedIn &&
-        <button
-          onClick={(e) => handleItemClick(e, 'sign-out')}
-        > sign-out
-        </button>
-      }
-      <EventCheck 
-        apiCalendar={apiCalendar}
-        getUserId={getUserId}
-      />
-      </>
-  );
-};
-
-export default CalendarLogin

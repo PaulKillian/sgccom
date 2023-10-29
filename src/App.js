@@ -5,7 +5,7 @@ import { createClient } from '@supabase/supabase-js'
 import { Auth } from '@supabase/auth-ui-react'
 import MainChat from './components/MainChat/MainChat';
 import EventForm from './components/Forms/EventForm'
-import CalendarLogin from './components/Calendar/Calendar';
+import CalendarLogin from './components/Calendar/CalendarLogin';
 
 const supabase = createClient(
   'https://oodbxjicokcxmmclwojn.supabase.co', 
@@ -103,6 +103,7 @@ export default function App() {
   } else {
     return (
       <>
+        {/* <MainChat /> */}
         <CalendarLogin getUserId={getUserId}/>
         <EventForm getUserId={getUserId}/>
       </>

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import CalendarLogin from '../Calendar/Calendar';
+import CalendarLogin from '../Calendar/CalendarLogin';
 import { supabase } from '../SupaBase'
 import ApiCalendar from 'react-google-calendar-api';
+import Calendar from '../Calendar/Calendar';
 
 const EventCheck = ({apiCalendar, getUserId}) => {
   const [events, setEvents] = useState([])
@@ -31,23 +32,22 @@ const EventCheck = ({apiCalendar, getUserId}) => {
     event.preventDefault();
 
     if(event.target.id === 'approve') {
-      const eventFromNow = {
+      const event = {
         summary: eventInfo.summary,
-        location: eventInfo.location,
+        location: eventInfo.summary,
         description: eventInfo.description,
-        time: 90,
         start: {
-          dateTime: new Date().toISOString(),
-          timeZone: "Europe/Paris",
+          dateTime: eventInfo.start,
+          timeZone: 'America/Los_Angeles',
         },
         end: {
-          dateTime: new Date(new Date().getTime() + 3600000).toISOString(),
-          timeZone: "Europe/Paris",
+          dateTime: eventInfo.end,
+          timeZone: 'America/Los_Angeles',
         },
       };
     
       apiCalendar
-        .createEventFromNow(eventFromNow)
+        .createEvent(event)
         .then((result) => {
           console.log(result);
         })
@@ -80,7 +80,10 @@ const EventCheck = ({apiCalendar, getUserId}) => {
   return (
     <div>
       {(events.length === 0)
-        ? <h1 className={'d-flex justify-content-center'}>There are no events</h1>
+        ? <div className={'mr-auto'}>
+            <h1 className='text-center'>There are no events</h1>
+            <Calendar />
+          </div>
         : <div>
           <div className='d-flex flex-wrap justify-content-around'>
             {events.map((eventInfo) => {
@@ -115,24 +118,7 @@ const EventCheck = ({apiCalendar, getUserId}) => {
             );
           })}
         </div>
-        <div className='d-flex justify-content-around'>
-          <iframe src='https://calendar.google.com/calendar/embed?src=psk65lava%40gmail.com&ctz=America%2FLos_Angeles' 
-            style={{
-              position: 'relative', 
-              top:'0',
-              left:'0',
-              bottom:'0', 
-              right:'0',
-              width:'70%', 
-              height:'70vh',
-              border:'none', 
-              margin:'0',
-              padding:'0',
-              overflow:'hidden' 
-            }}
-          >
-          </iframe>
-        </div>
+        <Calendar />
       </div>
     }
     </div>
