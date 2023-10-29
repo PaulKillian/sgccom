@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { eventData } from '../AdminEventCheck'
 
-  const Form = ({formData, handleSubmit}) => {
+  const Form = ({formData, handleSubmit, getUserId}) => {
     const formElements = {};
     const [state, setState] = useState('');
 
@@ -16,6 +16,8 @@ import { eventData } from '../AdminEventCheck'
         [event.target.id]: event.target.value
       }))
     } 
+
+    const eventId = Math.floor(Math.random() * 10000)
     
     return (
       <div className="container mt-5">
@@ -38,7 +40,11 @@ import { eventData } from '../AdminEventCheck'
                       />
                     }
                     {data.type === 'button' &&
-                      <button onClick={() => {handleSubmit(state)}} 
+                      <button onClick={() => {handleSubmit(
+                        state, 
+                        getUserId, 
+                        eventId
+                      )}} 
                         key={index}
                         type={data.type} 
                         className="btn btn-primary mr-2"

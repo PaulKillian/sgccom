@@ -15,11 +15,11 @@ export const eventFormData = [
     label: 'description'
   },
   {
-    type: 'text', 
+    type: 'datetime-local', 
     label: 'start'
   },
   {
-    type: 'text', 
+    type: 'datetime-local', 
     label: 'end'
   },
   {
@@ -28,27 +28,15 @@ export const eventFormData = [
   },
 ]
 
-export const handleSubmit = async (eventSubmission) => {
+export const handleSubmit = async (eventSubmission, getUserId, eventId) => {
   const {summary, location, description, start, end } = eventSubmission 
-  // e.preventDefault();
-  // const eventSubmission = {
-  //   'summary': 'Google I/O 2015',
-  //   'location': '800 Howard St., San Francisco, CA 94103',
-  //   'description': 'A chance to hear more about Google\'s developer products.',
-  //   'start': {
-  //     'dateTime': '2015-05-28T09:00:00-07:00',
-  //     'timeZone': 'America/Los_Angeles'
-  //   },
-  //   'end': {
-  //     'dateTime': '2015-05-28T17:00:00-07:00',
-  //     'timeZone': 'America/Los_Angeles'
-  //   },
-  // };
-
+  
+  const uuid = await getUserId()
   const { data, error } = await supabase
     .from('eventCheck')
     .insert({ 
-      id: 1, 
+      id: eventId, 
+      uuid: uuid[0].id,
       summary,
       location,
       description,
@@ -58,11 +46,12 @@ export const handleSubmit = async (eventSubmission) => {
     .select()
 }   
 
-const EventForm = () => {
+const EventForm = ({getUserId}) => {
   return (
     <Form 
       formData={eventFormData}
       handleSubmit={handleSubmit}
+      getUserId={getUserId}
     />
   )
 }
