@@ -34,6 +34,8 @@ const sort = { last_message_at: -1, updated_at: -1 };
 const client = StreamChat.getInstance(apiKey, { enableInsights: true, enableWSFallback: true });
 client.connectUser({ id: user, name: user, image: getRandomImage() }, userToken);
 
+console.log(client)
+
 const MainChat = () => {
   const [createType, setCreateType] = useState('');
   const [isCreating, setIsCreating] = useState(false);

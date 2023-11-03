@@ -1,7 +1,7 @@
 import React from 'react';
 import ApiCalendar from 'react-google-calendar-api';
 import { useState } from 'react'
-import { config } from "../GoogleConfig";
+import { config } from "./GoogleConfig";
 import EventCheck from '../EventCheck/EventCheck';
 
 const apiCalendar = new ApiCalendar(config);

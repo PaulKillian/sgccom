@@ -38,8 +38,28 @@ const customTheme = {
 
 const SignIn = () => {
   const [session, setSession] = useState(null)
+  const [id, setId] = useState(null)
+  const [token, setToken] = useState(null)
 
   useEffect(() => {
+    if(id) {
+      (async function getToken() {
+        try {
+          const response = await fetch(`http://localhost:3001/generate-token/${id[0].id}`)
+          if (response.ok) {
+            const result = await response.json()
+            setToken(result)
+            console.log(result)
+          } else {
+            console.error('Error fetching data')
+          }
+        } catch (error) {
+          console.error('Error:', error)
+        }
+      })()
+    }
+    
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session)
     })
@@ -50,15 +70,8 @@ const SignIn = () => {
       setSession(session)
     })
 
-    // (async function getUser() {
-    //   const {
-    //     data: { session },
-    //   } = await supabaseClient.auth.getSession()
-    //   console.log(data)
-    // })()
-
     return () => subscription.unsubscribe()
-  }, [])
+  }, [id])
 
   const getUserId = async () => {
     let { data: profiles, error } = await supabase
@@ -77,9 +90,10 @@ const SignIn = () => {
 
   if(session) {
     (async function get() {
-      const profiles = await getUserId()
-      console.log(profiles)
-      if (profiles.length === 0) {
+      const id = await getUserId()
+      console.log(id)
+      setId(id[0].id)
+      if (id.length === 0) {
         insertUserId()
       } else {
         return
@@ -92,7 +106,7 @@ const SignIn = () => {
       <div class="container w-50">
         <Auth
           supabaseClient={supabase}
-          theme="default" // can also be "dark" or "evenDarker"
+          theme="default"
           appearance={{ theme: customTheme }}
         />
       </div>
